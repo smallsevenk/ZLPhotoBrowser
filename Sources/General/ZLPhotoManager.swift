@@ -64,18 +64,27 @@ public class ZLPhotoManager: NSObject {
         }
         
         var placeholderAsset: PHObjectPlaceholder? = nil
-        PHPhotoLibrary.shared().performChanges({
-            let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-            placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
-        }) { (suc, error) in
-            ZLMainAsync {
-                if suc {
-                    let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
-                    completion?(suc, asset)
-                } else {
-                    completion?(false, nil)
+        DispatchQueue.global(qos: .background).async {
+           if let urlData = NSData(contentsOf: url) {
+            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+            let filePath = "\(documentsPath)/" + url.lastPathComponent
+            DispatchQueue.main.async {
+                urlData.write(toFile: filePath, atomically: true)
+                PHPhotoLibrary.shared().performChanges({
+                    let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath))
+                    placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
+                }) { suc, error in
+                    ZLMainAsync {
+                        if suc {
+                            let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
+                            completion?(suc, asset)
+                        } else {
+                            completion?(false, nil)
+                        }
+                    }
                 }
             }
+           }
         }
     }
     
