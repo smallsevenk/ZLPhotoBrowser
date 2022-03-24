@@ -31,5 +31,7 @@ Pod::Spec.new do |s|
   s.subspec "Core" do |sp|
     sp.source_files  = ["Sources/**/*.swift", "Sources/ZLPhotoBrowser.h"]
   end
+  
+  s.pod_target_xcconfig = {'ENABLE_BITCODE' => 'NO'}
 
 end
