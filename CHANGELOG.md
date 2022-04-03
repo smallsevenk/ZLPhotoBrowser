@@ -2,6 +2,18 @@
 
 -----
 
+## [4.2.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.5) (2022-03-21)
+### Fix:
+* Fix the bug of failing to archive with Xcode 13.3.[#699](https://github.com/longitachi/ZLPhotoBrowser/issues/699)
+
+---
+
+## [4.2.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.4) (2022-03-14)
+### Fix:
+* Fixes the bug when select the original photo in the preview.
+
+---
+
 ## [4.2.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.3) (2022-03-07)
 ### Add:
 * Done button title color can be defined separately.
