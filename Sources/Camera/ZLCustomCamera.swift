@@ -550,9 +550,15 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: localLanguageTextValue(.done), style: .default) { (_) in
-            self.dismiss(animated: true) {
+            if ((self.presentingViewController) != nil) {
                 if let t = type {
                     ZLPhotoConfiguration.default().noAuthorityCallback?(t)
+                }
+            } else {
+                self.dismiss(animated: true) {
+                    if let t = type {
+                        ZLPhotoConfiguration.default().noAuthorityCallback?(t)
+                    }
                 }
             }
         }
@@ -630,8 +636,12 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     @objc func dismissBtnClick() {
-        self.dismiss(animated: true) {
+        if ((self.presentingViewController) != nil) {
             self.cancelBlock?()
+        } else {
+            self.dismiss(animated: true) {
+                self.cancelBlock?()
+            }
         }
     }
     
@@ -706,8 +716,12 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.recordVideoPlayerLayer?.player?.pause()
         // 置为nil会导致卡顿，先注释，不影响内存释放
 //        self.recordVideoPlayerLayer?.player = nil
-        self.dismiss(animated: true) {
+        if ((self.presentingViewController) != nil) {
             self.takeDoneBlock?(self.takedImage, self.videoUrl)
+        } else {
+            self.dismiss(animated: true) {
+                self.takeDoneBlock?(self.takedImage, self.videoUrl)
+            }
         }
     }
     
